@@ -6,3 +6,4 @@
 # it into this module with the name 'Player':
 
 from DeepMagic.player import ExamplePlayer as Player
+

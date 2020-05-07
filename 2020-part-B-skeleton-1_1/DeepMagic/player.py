@@ -1,3 +1,4 @@
+import action
 
 
 class ExamplePlayer:
@@ -27,7 +28,9 @@ class ExamplePlayer:
 
         # generate all possible moves from the given game condition
         # choose the action based on the best possible score. Use Minimax.
-        act = Boom((0, 0))
+        act = action.Boom((0, 0))
+
+        print(act.get_tuple_form())
 
         return act.get_tuple_form()
 
