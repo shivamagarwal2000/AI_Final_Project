@@ -13,7 +13,6 @@ class ExamplePlayer:
         """
         # TODO: Set up state representation.
 
-
     def action(self):
         """
         This method is called at the beginning of each of your turns to request 
@@ -25,7 +24,6 @@ class ExamplePlayer:
         """
         # TODO: Decide what action to take, and return it
         return ("BOOM", (0, 0))
-
 
     def update(self, colour, action):
         """
