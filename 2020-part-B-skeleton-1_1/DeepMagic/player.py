@@ -1,5 +1,3 @@
-import action
-
 
 class ExamplePlayer:
     def __init__(self, colour):
@@ -15,24 +13,19 @@ class ExamplePlayer:
         """
         # TODO: Set up state representation.
 
+
     def action(self):
         """
-        This method is called at the beginning of each of your turns to request
+        This method is called at the beginning of each of your turns to request 
         a choice of action from your program.
 
-        Based on the current state of the game, your player should select and
+        Based on the current state of the game, your player should select and 
         return an allowed action to play on this turn. The action must be
         represented based on the spec's instructions for representing actions.
         """
         # TODO: Decide what action to take, and return it
+        return ("BOOM", (0, 0))
 
-        # generate all possible moves from the given game condition
-        # choose the action based on the best possible score. Use Minimax.
-        act = action.Boom((0, 0))
-
-        print(act.get_tuple_form())
-
-        return act.get_tuple_form()
 
     def update(self, colour, action):
         """
@@ -53,5 +46,3 @@ class ExamplePlayer:
         against the game rules).
         """
         # TODO: Update state representation in response to action.
-
-        # this is pretty straight forward as the action is given and only need to update the game state.
