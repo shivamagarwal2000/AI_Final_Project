@@ -88,7 +88,7 @@ def play(players,
 
         # Ask the current player for their next action (calling their .action()
         # method).
-        action = curr_player.action()
+        action = curr_player.action
 
         # Validate this action (or pass) and apply it to the game if it is
         # allowed. Display the resulting game state.
