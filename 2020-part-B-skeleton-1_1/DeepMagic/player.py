@@ -1,3 +1,5 @@
+from .actions import *
+
 
 class ExamplePlayer:
     def __init__(self, colour):
@@ -23,7 +25,12 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
         # TODO: Decide what action to take, and return it
-        return ("BOOM", (0, 0))
+
+        act = Move(1, (0, 0), (1, 0))
+
+        return act.get_tuple_form()
+
+        # return ("BOOM", (0, 0))
 
     def update(self, colour, action):
         """
