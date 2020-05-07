@@ -30,8 +30,6 @@ class ExamplePlayer:
 
         return act.get_tuple_form()
 
-        # return ("BOOM", (0, 0))
-
     def update(self, colour, action):
         """
         This method is called at the end of every turn (including your player’s 
