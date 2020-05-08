@@ -13,9 +13,6 @@ def get_no_pieces(game_state, type):
     return ans
 
 
-def 
-
-
 def eval(game_state):
     frnd_pieces = get_no_pieces(game_state, frnd)
     enem_pieces = get_no_pieces(game_state, enem)
