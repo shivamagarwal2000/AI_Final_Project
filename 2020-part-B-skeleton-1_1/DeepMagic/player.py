@@ -10,7 +10,8 @@
 
 # ============================================================================ #
 
-from referee.game import _NEXT_SQUARES, _NEAR_SQUARES
+from DeepMagic.actions import * # Boom, Move, valid_moves, move, boom
+
 
 _BLACKS_ = [(7,0), (7,1), (7,3), (7,4), (7,6), (7,7), 
             (6,0), (6,1), (6,3), (6,4), (6,6), (6,7)]
@@ -34,9 +35,9 @@ class ExamplePlayer:
 
         self.colour = colour
         if colour == "white":
-            self.state = set_board(_WHITES_, _BLACKS_)
+            self.state, self.pieces, self.opponent = set_board(_WHITES_, _BLACKS_)
         else:
-            self.state = set_board(_BLACKS_, _WHITES_)
+            self.state, self.pieces, self.opponent = set_board(_BLACKS_, _WHITES_)
 
     def action(self):
         """
@@ -72,37 +73,16 @@ class ExamplePlayer:
         # TODO: Update state representation in response to action.
         if action[0] == "MOVE":
             n, origin, destination = action[1:]
-            self.move(n, origin, destination)
+            move(self, n, origin, destination, colour)
         else:
             coordinates = action[1]
-            self.boom(coordinates)
+            boom(self, coordinates, colour)
         
 
-    # ("MOVE", n, (xa, ya), (xb, yb))
-
-    def move(self, pieces, origin, destination):
-        xa, ya = origin
-        xb, yb = destination
-        self.state[xb][yb].n += pieces
-        self.state[xb][yb].type = self.state[xa][ya].type
-        self.state[xa][ya].n -= pieces
-        
-        if self.state[xa][ya].n == 0:
-            self.state[xa][ya].type = None
-
-    # ("BOOM", (x, y))
-    def boom(self, coordinate):
-        x, y = coordinate
-        self.state[x][y] = CellObject(0, None, (x,y))
-
-        for (near_x, near_y) in _NEAR_SQUARES((x,y)):
-            if self.state[near_x][near_y].n != 0:
-                self.boom((near_x, near_y))
 
 # ---------------------------------------------------------------------------- #
 
-class CellObject():
-
+class CellObject:
     def __init__(self, n, min_or_max, coordinate):
         self.n = n
         self.type = min_or_max
@@ -116,11 +96,15 @@ def set_board(player_pieces, enemy_pieces):
             for y in range(8):
                 board[x][y] = CellObject(0, None, (x, y))
 
+        player = {}
+        enemy = {}
         for square in player_pieces:
             x, y = square
             board[x][y] = CellObject(1, "max", (x,y))
+            player[(x,y)] = 1
         for square in enemy_pieces:
             x, y = square
             board[x][y] = CellObject(1, "min", (x,y))
+            enemy[(x,y)] = 1
 
-        return board
+        return board, player, enemy
