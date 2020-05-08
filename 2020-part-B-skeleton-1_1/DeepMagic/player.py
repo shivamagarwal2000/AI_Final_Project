@@ -1,7 +1,25 @@
-from .actions import *
+# Assignment 2 COMP30024: Artificial Intelligence Semester 1 2020
+
+# Group Name: DeepMagic
+# 
+# Student 1 Name: Chan Jie Ho
+# Student 1 Number: 961948
+#
+# Student 2 Name: Shivam Agarwal
+# Student 2 Number: 951424
+
+# ============================================================================ #
+
+from referee.game import _NEXT_SQUARES, _NEAR_SQUARES
+
+_BLACKS_ = [(7, 0), (7, 1), (7, 3), (7, 4), (7, 6), (7, 7),
+            (6, 0), (6, 1), (6, 3), (6, 4), (6, 6), (6, 7)]
+_WHITES_ = [(1, 0), (1, 1), (1, 3), (1, 4), (1, 6), (1, 7),
+            (0, 0), (0, 1), (0, 3), (0, 4), (0, 6), (0, 7)]
 
 
 class ExamplePlayer:
+
     def __init__(self, colour):
         """
         This method is called once at the beginning of the game to initialise
@@ -15,6 +33,12 @@ class ExamplePlayer:
         """
         # TODO: Set up state representation.
 
+        self.colour = colour
+        if colour == "white":
+            self.state = set_board(_WHITES_, _BLACKS_)
+        else:
+            self.state = set_board(_BLACKS_, _WHITES_)
+
     def action(self):
         """
         This method is called at the beginning of each of your turns to request 
@@ -25,10 +49,7 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
         # TODO: Decide what action to take, and return it
-
-        act = Move(1, (0, 0), (1, 0))
-
-        return act.get_tuple_form()
+        return ("BOOM", (0, 0))
 
     def update(self, colour, action):
         """
@@ -49,3 +70,57 @@ class ExamplePlayer:
         against the game rules).
         """
         # TODO: Update state representation in response to action.
+        if action[0] == "MOVE":
+            n, origin, destination = action[1:]
+            self.move(n, origin, destination)
+        else:
+            coordinates = action[1]
+            self.boom(coordinates)
+
+    # ("MOVE", n, (xa, ya), (xb, yb))
+
+    def move(self, pieces, origin, destination):
+        xa, ya = origin
+        xb, yb = destination
+        self.state[xb][yb].n += pieces
+        self.state[xb][yb].type = self.state[xa][ya].type
+        self.state[xa][ya].n -= pieces
+
+        if self.state[xa][ya].n == 0:
+            self.state[xa][ya].type = None
+
+    # ("BOOM", (x, y))
+    def boom(self, coordinate):
+        x, y = coordinate
+        self.state[x][y] = CellObject(0, None, (x, y))
+
+        for (near_x, near_y) in _NEAR_SQUARES((x, y)):
+            if self.state[near_x][near_y].n != 0:
+                self.boom((near_x, near_y))
+
+
+# ---------------------------------------------------------------------------- #
+
+class CellObject():
+
+    def __init__(self, n, min_or_max, coordinate):
+        self.n = n
+        self.type = min_or_max
+        self.coordinate = coordinate
+
+
+def set_board(player_pieces, enemy_pieces):
+    board = [[0 for x in range(8)] for y in range(8)]
+
+    for x in range(8):
+        for y in range(8):
+            board[x][y] = CellObject(0, None, (x, y))
+
+    for square in player_pieces:
+        x, y = square
+        board[x][y] = CellObject(1, "max", (x, y))
+    for square in enemy_pieces:
+        x, y = square
+        board[x][y] = CellObject(1, "min", (x, y))
+
+    return board
