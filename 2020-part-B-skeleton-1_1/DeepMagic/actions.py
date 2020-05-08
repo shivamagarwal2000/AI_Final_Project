@@ -15,6 +15,7 @@ class Boom(Action):
         return my_tuple
 
 
+
 class Move(Action):
     def __init__(self, no, s_coord, d_coord):
         super().__init__('MOVE')
