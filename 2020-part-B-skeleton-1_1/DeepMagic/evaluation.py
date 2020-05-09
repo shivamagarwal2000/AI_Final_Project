@@ -18,15 +18,18 @@ def eval(game_state):
     enem_pieces = get_no_pieces(game_state, enem)
     weight = 10
 
+    if frnd_pieces == 0 and enem_pieces != 0:
+        return -10000
+    elif enem_pieces == 0 and frnd_pieces != 0:
+        return 10000
+
     return weight * (frnd_pieces - enem_pieces)
 
 
-def utility(game_state):
+def terminal(game_state):
     enem_pieces = get_no_pieces(game_state, enem)
     frnd_pieces = get_no_pieces(game_state, frnd)
-    if enem_pieces == 0:
-        return 1000
-    elif frnd_pieces == 0:
-        return -1000
+    if enem_pieces == 0 or frnd_pieces == 0:
+        return True
     else:
-        return 0
+        return False

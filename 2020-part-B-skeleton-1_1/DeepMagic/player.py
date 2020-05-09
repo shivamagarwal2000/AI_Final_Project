@@ -12,6 +12,10 @@
 
 from referee.game import _NEXT_SQUARES, _NEAR_SQUARES
 
+from .actions import *
+
+from .evaluation import *
+
 _BLACKS_ = [(7, 0), (7, 1), (7, 3), (7, 4), (7, 6), (7, 7),
             (6, 0), (6, 1), (6, 3), (6, 4), (6, 6), (6, 7)]
 _WHITES_ = [(1, 0), (1, 1), (1, 3), (1, 4), (1, 6), (1, 7),
@@ -39,6 +43,9 @@ class ExamplePlayer:
         else:
             self.state = set_board(_BLACKS_, _WHITES_)
 
+
+
+
     def action(self):
         """
         This method is called at the beginning of each of your turns to request 
@@ -49,6 +56,9 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
         # TODO: Decide what action to take, and return it
+
+        # Actual minimax implementation
+
         return ("BOOM", (0, 0))
 
     def update(self, colour, action):
@@ -124,3 +134,33 @@ def set_board(player_pieces, enemy_pieces):
         board[x][y] = CellObject(1, "min", (x, y))
 
     return board
+
+
+# returns a list of all states possible after applying all the possible actions
+def get_all_states(game_state):
+    return all_states
+
+
+
+# the minimax algorithm that decides which move to play next
+def minimax(game_state, depth, maximising_player):
+    if depth == 0 or terminal(game_state) == 1000 or terminal(game_state) == -1000:
+        return eval(game_state)
+
+    # apply all actions to the state and return the list of all the possible states
+    all_states = get_all_states(game_state)
+
+    if maximising_player:
+        value = -1000000
+        for child in all_states:
+            value = max(value, minimax(child, depth - 1, False)
+        return value
+    else
+        value = 1000000
+        for child in all_states:
+            value = min(value, minimax(child, depth - 1, True)
+        return value
+
+
+
+
