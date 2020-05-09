@@ -144,7 +144,7 @@ def get_all_states(game_state):
 
 # the minimax algorithm that decides which move to play next
 def minimax(game_state, depth, maximising_player):
-    if depth == 0 or terminal(game_state) == 1000 or terminal(game_state) == -1000:
+    if depth == 0 or terminal(game_state) == True:
         return eval(game_state)
 
     # apply all actions to the state and return the list of all the possible states
@@ -155,7 +155,7 @@ def minimax(game_state, depth, maximising_player):
         for child in all_states:
             value = max(value, minimax(child, depth - 1, False)
         return value
-    else
+    else:
         value = 1000000
         for child in all_states:
             value = min(value, minimax(child, depth - 1, True)
