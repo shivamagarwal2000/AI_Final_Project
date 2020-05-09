@@ -13,9 +13,9 @@
 from DeepMagic.actions import * # Boom, Move, valid_moves, move, boom
 
 
-_BLACKS_ = [(7,0), (7,1), (7,3), (7,4), (7,6), (7,7), 
+_BLACK_ = [(7,0), (7,1), (7,3), (7,4), (7,6), (7,7), 
             (6,0), (6,1), (6,3), (6,4), (6,6), (6,7)]
-_WHITES_ = [(1,0), (1,1), (1,3), (1,4), (1,6), (1,7), 
+_WHITE_ = [(1,0), (1,1), (1,3), (1,4), (1,6), (1,7), 
             (0,0), (0,1), (0,3), (0,4), (0,6), (0,7)]
                         
 class ExamplePlayer:
@@ -35,9 +35,9 @@ class ExamplePlayer:
 
         self.colour = colour
         if colour == "white":
-            self.state, self.pieces, self.opponent = set_board(_WHITES_, _BLACKS_)
+            self.state, self.pieces, self.opponent = set_board(_WHITE_, _BLACK_)
         else:
-            self.state, self.pieces, self.opponent = set_board(_BLACKS_, _WHITES_)
+            self.state, self.pieces, self.opponent = set_board(_BLACK_, _WHITE_)
 
     def action(self):
         """
