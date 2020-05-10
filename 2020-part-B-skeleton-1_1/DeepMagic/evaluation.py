@@ -2,13 +2,11 @@
 # Eval(s) = w1f1(s) + w2f2(s) + . . . + wnfn(s)
 
 
-def get_no_pieces(game_state, type):
+def get_no_pieces(player_pieces):
     ans = 0
-    for i in range(0, 8):
-        for j in range(0, 8):
-            if game_state.x == i and game_state.y == j:
-                if game_state.piece_type == type:
-                    ans += game_state.no_of_pieces
+    for piece in player_pieces.keys():
+        n = player_pieces[piece]
+        ans += n
 
     return ans
 
