@@ -11,7 +11,8 @@
 # ============================================================================ #
 
 from DeepMagic.actions import * # Boom, Move, valid_moves, move, boom
-
+from DeepMagic.evaluation import *
+import copy
 
 _BLACK_ = [(7,0), (7,1), (7,3), (7,4), (7,6), (7,7), 
             (6,0), (6,1), (6,3), (6,4), (6,6), (6,7)]
@@ -49,6 +50,8 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
         # TODO: Decide what action to take, and return it
+        get_all_states(self, (self.pieces, self.opponent), True)
+
         return ("BOOM", (0, 0)) 
 
 
@@ -71,13 +74,71 @@ class ExamplePlayer:
         against the game rules).
         """
         # TODO: Update state representation in response to action.
+
         if action[0] == "MOVE":
             n, origin, destination = action[1:]
             move(self, n, origin, destination, colour)
         else:
             coordinates = action[1]
             boom(self, coordinates, colour)
+
+    
+# game_state will be in the form of (self.pieces, self.opponent)
+# returns a list of all states possible after applying all the possible actions
+def get_all_states(player, game_state, maximising_player):
+
+    all_states = []
+    pieces, opponent = game_state
+    
+
+    if maximising_player:
+        moves = valid_moves(pieces, opponent)
+        colour = player.colour
+    else:
+        moves = valid_moves(opponent, pieces)
+        if player.colour == "white":
+            colour = "black"
+        else: 
+            colour = "white"
+
+    for movement in moves:
+        action = movement.get_tuple_form()
+        print(action)
+        temp = copy.deepcopy(player)
+        if action[0] == "MOVE":
+            n, origin, destination = action[1:]
+            move(temp, n, origin, destination, colour)
+        else:
+            coordinates = action[1]
+            boom(temp, coordinates, colour)
+
+        new_player_pieces = temp.pieces
+        new_enemy_pieces = temp.opponent
         
+        all_states.append((new_player_pieces, new_enemy_pieces))
+    
+    return all_states
+
+
+
+# the minimax algorithm that decides which move to play next
+def minimax(player, game_state, depth, maximising_player):
+    if depth == 0 or terminal(game_state) == True:
+        return eval(game_state)
+
+    # apply all actions to the state and return the list of all the possible states
+    all_states = get_all_states(player, game_state, maximising_player)
+
+    if maximising_player:
+        value = -1000000
+        for child in all_states:
+            value = max(value, minimax(child, depth - 1, False))
+        return value
+    else:
+        value = 1000000
+        for child in all_states:
+            value = min(value, minimax(child, depth - 1, True))
+        return value
 
 
 # ---------------------------------------------------------------------------- #
