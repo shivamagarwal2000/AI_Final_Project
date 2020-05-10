@@ -1,4 +1,17 @@
+# Assignment 2 COMP30024: Artificial Intelligence Semester 1 2020
+
+# Group Name: DeepMagic
+# 
+# Student 1 Name: Chan Jie Ho
+# Student 1 Number: 961948
+#
+# Student 2 Name: Shivam Agarwal
+# Student 2 Number: 951424
+
+# ============================================================================ #
+
 from referee.game import _NEXT_SQUARES, _NEAR_SQUARES
+import copy
 
 
 class Action:
@@ -45,7 +58,6 @@ def valid_moves(player_pieces, enemy_pieces):
         # List moves
         for hello in range(1, n + 1):
             for steps in range(1, n + 1):
-
                 for cardinal in direction:
 
                     dest_x = x
@@ -87,12 +99,9 @@ def move(player, pieces, origin, destination, colour):
         player.state[xa][ya].type = None
 
         if player.colour == colour:
-            # self.pieces.remove((xa,ya))
             del player.pieces[(xa, ya)]
         else:
-            # self.opponent.remove((xa,ya))
             del player.opponent[(xa, ya)]
-
 
     else:
         if player.colour == colour:
@@ -106,13 +115,46 @@ def boom(player, coordinate, colour):
     x, y = coordinate
     player.state[x][y].n = 0
     player.state[x][y].type = None
+
     if player.colour == colour:
-        # self.pieces.remove((x,y))
         del player.pieces[(x, y)]
     else:
-        # self.opponent.remove((x,y))
         del player.opponent[(x, y)]
 
     for (near_x, near_y) in _NEAR_SQUARES((x, y)):
         if player.state[near_x][near_y].n != 0:
             boom(player, (near_x, near_y), colour)
+
+
+# game_state will be in the form of (self.pieces, self.opponent)
+# returns a list of all states possible after applying all the possible actions
+def get_all_states(player, game_state, maximising_player):
+    all_states = []
+    pieces, opponent = game_state
+
+    if maximising_player:
+        moves = valid_moves(pieces, opponent)
+        colour = player.colour
+    else:
+        moves = valid_moves(opponent, pieces)
+        if player.colour == "white":
+            colour = "black"
+        else:
+            colour = "white"
+
+    for movement in moves:
+        action = movement.get_tuple_form()
+        temp = copy.deepcopy(player)
+        if action[0] == "MOVE":
+            n, origin, destination = action[1:]
+            move(temp, n, origin, destination, colour)
+        else:
+            coordinates = action[1]
+            boom(temp, coordinates, colour)
+
+        new_player_pieces = temp.pieces
+        new_enemy_pieces = temp.opponent
+
+        all_states.append((new_player_pieces, new_enemy_pieces))
+
+    return all_states
