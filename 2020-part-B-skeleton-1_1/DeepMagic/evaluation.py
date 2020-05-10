@@ -1,3 +1,15 @@
+# Assignment 2 COMP30024: Artificial Intelligence Semester 1 2020
+
+# Group Name: DeepMagic
+# 
+# Student 1 Name: Chan Jie Ho
+# Student 1 Number: 961948
+#
+# Student 2 Name: Shivam Agarwal
+# Student 2 Number: 951424
+
+# ============================================================================ #
+
 # the module will be used to estimate the evaluation function of the form
 # Eval(s) = w1f1(s) + w2f2(s) + . . . + wnfn(s)
 
