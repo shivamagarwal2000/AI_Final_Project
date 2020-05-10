@@ -70,7 +70,8 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
 
-        # TODO: Decide what action to take, and return it        
+        # TODO: Decide what action to take, and return it       
+        # print(get_all_states(self, (self.pieces, self.opponent), True))
         return ("BOOM", (0, 0)) 
 
     # ------------------------------------------------------------------------ #
@@ -105,7 +106,6 @@ class ExamplePlayer:
         """
 
         # Determine if the action was a move or boom action and perform it
-        print("Hello")
         if action[0] == "MOVE":  
             move(self, action[1:], colour)
         else:

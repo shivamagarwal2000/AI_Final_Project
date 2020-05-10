@@ -228,12 +228,11 @@ def boom(player, coordinate):
 
 def get_all_states(player, game_state, maximising_player):
 
-    all_states = {}
+    all_states = []
     pieces, opponent = game_state
     
     # Get the colour of the player to maximise and the list of possible actions
     # that the player can take
-
     if maximising_player:
         moves = valid_moves(pieces, opponent)
         colour = player.colour
@@ -254,7 +253,7 @@ def get_all_states(player, game_state, maximising_player):
         new_player_pieces = temp.pieces
         new_opponent_pieces = temp.opponent
         
-        all_states[(action)] = (new_player_pieces, new_opponent_pieces)
+        all_states.append((new_player_pieces, new_opponent_pieces))
     
     return all_states
 
