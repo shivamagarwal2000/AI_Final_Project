@@ -103,7 +103,6 @@ def get_all_states(player, game_state, maximising_player):
 
     for movement in moves:
         action = movement.get_tuple_form()
-        print(action)
         temp = copy.deepcopy(player)
         if action[0] == "MOVE":
             n, origin, destination = action[1:]
