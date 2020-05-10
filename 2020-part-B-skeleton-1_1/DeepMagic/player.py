@@ -51,7 +51,7 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
         # TODO: Decide what action to take, and return it
-        agent = MinimaxAgent(1)
+        agent = MinimaxAgent(3)
         return agent.minimax_decision(self)
 
 

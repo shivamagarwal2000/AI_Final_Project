@@ -128,9 +128,10 @@ def boom(player, coordinate, colour):
 
 # game_state will be in the form of (self.pieces, self.opponent)
 # returns a list of all states possible after applying all the possible actions
-def get_all_states(player, game_state, maximising_player):
+def get_all_states(player, maximising_player):
     all_states = []
-    pieces, opponent = game_state
+    pieces = player.pieces
+    opponent = player.opponent
 
     if maximising_player:
         moves = valid_moves(pieces, opponent)
@@ -158,27 +159,16 @@ def get_all_states(player, game_state, maximising_player):
     return all_states
 
 
-# get all the possible actions based on the turn
-def get_all_actions(game_state, maximising_player):
-    pieces, opponent = game_state
-
-    if maximising_player:
-        moves = valid_moves(pieces, opponent)
-    else:
-        moves = valid_moves(opponent, pieces)
-
-    return moves
-
 # apply the given action and return the game state without altering the given state
-def apply_action(action_obj, player, colour):
+def apply_action(action_obj, player):
     action = action_obj.get_tuple_form()
     temp = copy.deepcopy(player)
     if action[0] == "MOVE":
         n, origin, destination = action[1:]
-        move(temp, n, origin, destination, colour)
+        move(temp, n, origin, destination, player.colour)
     else:
         coordinates = action[1]
-        boom(temp, coordinates, colour)
+        boom(temp, coordinates, player.colour)
 
     return temp
 

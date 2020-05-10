@@ -12,11 +12,11 @@ class MinimaxAgent:
         self.max_depth = max_depth
 
     def minimax_decision(self, player):
-        list_actions = get_all_actions(player.state, True)
+        list_actions = valid_moves(player.pieces, player.opponent)
         value = []
 
         for i, action in enumerate(list_actions):
-            temp_player = apply_action(player, action)
+            temp_player = apply_action(action, player)
             value[i] = self.minimax_val(temp_player, self.max_depth, False)
 
         maximum = 0
@@ -33,7 +33,7 @@ class MinimaxAgent:
 
         # apply all actions to the state and return the list of all the possible states
         # list of tuples of player pieces and opponent pieces
-        all_states = get_all_states(player, player.state, maximising_player)
+        all_states = get_all_states(player, maximising_player)
 
         if maximising_player:
             value = -1000000
