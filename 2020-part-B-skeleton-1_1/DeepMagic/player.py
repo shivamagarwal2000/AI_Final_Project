@@ -9,7 +9,7 @@
 # Student 2 Number: 951424
 
 # Player module holds all the classes and functions required to define the 
-# player that will be playing the Expendibots game 
+# player that will be playing the Expendibots game .
 
 from DeepMagic.actions import * 
 from DeepMagic.evaluation import *
@@ -27,11 +27,11 @@ class ExamplePlayer:
 
     # __INIT__ FUNCTION #
     # ----------------- #
-
+    #
     # Player constructor that sets up an 8x8 matrix of the board as well as two 
     # dictionaries that will allow the player to keep track of the pieces that 
-    # the player controls and the pieces that the opponent controls.
-
+    # the player/opponent controls.
+    #
     # It takes the colour of the player (either "black" or "white") as input.
     
     def __init__(self, colour):
@@ -46,27 +46,17 @@ class ExamplePlayer:
         program will play as (White or Black). The value will be one of the 
         strings "white" or "black" correspondingly.
         """
-        
-        # Initial coordinates of the pieces
-        _BLACK_ = [(7,0), (7,1), (7,3), (7,4), (7,6), (7,7), 
-                   (6,0), (6,1), (6,3), (6,4), (6,6), (6,7)]
-        _WHITE_ = [(1,0), (1,1), (1,3), (1,4), (1,6), (1,7), 
-                   (0,0), (0,1), (0,3), (0,4), (0,6), (0,7)]
 
         self.colour = colour
-        
-        if colour == "white":
-            self.state, self.pieces, self.opponent = set_board(_WHITE_, _BLACK_)
-    
-        else:
-            self.state, self.pieces, self.opponent = set_board(_BLACK_, _WHITE_)
+        self.state, self.pieces, self.opponent = set_board(colour)
+
 
     # ------------------------------------------------------------------------ #
     # ACTION FUNCTION #
     # --------------- #
-
+    #
     # Action function that decides what action the player should take
-
+    #
     # It returns the best possible action, decided by the minimax algorithm
 
     def action(self):
@@ -80,19 +70,17 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
 
-        # TODO: Decide what action to take, and return it
-        print(get_all_states(self, (self.pieces, self.opponent), True))
-        
+        # TODO: Decide what action to take, and return it        
         return ("BOOM", (0, 0)) 
 
     # ------------------------------------------------------------------------ #
     # UPDATE FUNCTION #
     # --------------- #
-
+    #
     # Update function that updates the internal representation of the board and 
     # the pieces remaining on the board that the player and the opponent 
     # controls after each player's turn.
-
+    #
     # It takes in the colour of the player that last performed the action and 
     # the action performed.
 
@@ -117,13 +105,11 @@ class ExamplePlayer:
         """
 
         # Determine if the action was a move or boom action and perform it
-        if action[0] == "MOVE":
-            n, origin, destination = action[1:]
-            move(self, n, origin, destination, colour)
-
+        print("Hello")
+        if action[0] == "MOVE":  
+            move(self, action[1:], colour)
         else:
-            coordinates = action[1]
-            boom(self, coordinates, colour)
+            boom(self, action[1])
 
 # ============================================================================ #
 # CELLOBJECT CLASS #
@@ -140,48 +126,64 @@ class CellObject:
 
     # It takes in the number of pieces on that tile and the type of the pieces (whether the algorithm will be finding the max of it – the player – or the min – the opponent) and the coordinates.
 
-    def __init__(self, n, min_or_max, coordinate):
+    def __init__(self, n, colour, coordinate):
         self.n = n
-        self.type = min_or_max
+        self.colour = colour
         self.coordinate = coordinate
 
-# ---------------------------------------------------------------------------- #
+# ============================================================================ #
 # SET_BOARD FUNCTION #
 # ------------------ #
 #
 # Helper function that creates the initial 8x8 matrix of CellObjects and places 
 # all the initial pieces on the corresponding tiles.
 # 
-# It takes the coordinates of the player's pieces and those of the opponenet's 
-# pieces input and returns 8x8 board, and the dictionaries of the coordinates 
-# of the player's and enemy's pieces and how many pieces are on each coordinate.
+# It takes the coordinates of the player's/opponent's pieces as input and 
+# returns 8x8 board, and the dictionaries of the coordinates of the player's/ 
+# opponent's pieces and how many pieces are on each coordinate.
 
-def set_board(player_pieces, enemy_pieces):
+def set_board(colour):
 
-        board = [[0 for x in range(8)] for y in range(8)]
+    # Initial coordinates of the pieces
+    _BLACK_ = [(7,0), (7,1), (7,3), (7,4), (7,6), (7,7), 
+                (6,0), (6,1), (6,3), (6,4), (6,6), (6,7)]
+    _WHITE_ = [(1,0), (1,1), (1,3), (1,4), (1,6), (1,7), 
+                (0,0), (0,1), (0,3), (0,4), (0,6), (0,7)]
 
-        # Fill the 8x8 matrix with empty tiles first
-        for x in range(8):
-            for y in range(8):
-                board[x][y] = CellObject(0, None, (x, y))
+    if colour == "white":
+        player_pieces = _WHITE_
+        opponent_pieces = _BLACK_
+        opponent_colour = "black"
+    else:
+        player_pieces = _BLACK_
+        opponent_pieces = _WHITE_
+        opponent_colour = "white"
 
-        # Iterate through the given coordinates and fill the 8x8 matrix with 
-        # the pieces and add it to a dictionary to keep track of the pieces
-        # using the same representation as Assignment 1
-        player = {}
-        enemy = {}
+    
+    board = [[0 for x in range(8)] for y in range(8)]
 
-        for square in player_pieces:
-            x, y = square
-            board[x][y] = CellObject(1, "max", (x,y))
-            player[(x,y)] = 1
+    # Fill the 8x8 matrix with empty tiles first
+    for x in range(8):
+        for y in range(8):
+            board[x][y] = CellObject(0, None, (x, y))
 
-        for square in enemy_pieces:
-            x, y = square
-            board[x][y] = CellObject(1, "min", (x,y))
-            enemy[(x,y)] = 1
+    # Iterate through the given coordinates and fill the 8x8 matrix with 
+    # the pieces and add it to a dictionary to keep track of the pieces
+    # using the same representation as Assignment 1
+    player = {}
+    opponent = {}
 
-        return board, player, enemy
+    for square in player_pieces:
+        x, y = square
+        board[x][y] = CellObject(1, colour, (x,y))
+        player[(x,y)] = 1
+
+    for square in opponent_pieces:
+        x, y = square
+        board[x][y] = CellObject(1, opponent_colour, (x,y))
+        opponent[(x,y)] = 1
+
+    return board, player, opponent
 
 # ============================================================================ #
 
