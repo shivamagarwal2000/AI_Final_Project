@@ -11,9 +11,13 @@ def get_no_pieces(player_pieces):
     return ans
 
 
-def eval(game_state):
-    frnd_pieces = get_no_pieces(game_state, frnd)
-    enem_pieces = get_no_pieces(game_state, enem)
+# find the chaining score of a state - the difference between the max chain size of player and the opponent
+# def chaining_score()
+
+
+def evaluate(player):
+    frnd_pieces = get_no_pieces(player.pieces)
+    enem_pieces = get_no_pieces(player.opponent)
     weight = 10
 
     if frnd_pieces == 0 and enem_pieces != 0:
@@ -24,9 +28,9 @@ def eval(game_state):
     return weight * (frnd_pieces - enem_pieces)
 
 
-def terminal(game_state):
-    enem_pieces = get_no_pieces(game_state, enem)
-    frnd_pieces = get_no_pieces(game_state, frnd)
+def terminal(player):
+    frnd_pieces = get_no_pieces(player.pieces)
+    enem_pieces = get_no_pieces(player.opponent)
     if enem_pieces == 0 or frnd_pieces == 0:
         return True
     else:
