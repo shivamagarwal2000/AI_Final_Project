@@ -13,19 +13,21 @@ class MinimaxAgent:
 
     def minimax_decision(self, player):
         list_actions = valid_moves(player.pieces, player.opponent)
-        value = []
+        # print(len(list_actions))
+        value = [None] * len(list_actions)
 
         for i, action in enumerate(list_actions):
             temp_player = apply_action(action, player)
             value[i] = self.minimax_val(temp_player, self.max_depth, False)
+            # print(value[i])
 
-        maximum = 0
+        maximum = -10000
+
         for i, val in enumerate(value):
             if val > maximum:
-                maximum = value
+                maximum = val
                 index = i
-
-        return list_actions[index]
+        return list_actions[index].get_tuple_form()
 
     def minimax_val(self, player, depth, maximising_player):
         if depth == 0 or terminal(player) == True:

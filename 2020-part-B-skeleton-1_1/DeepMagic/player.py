@@ -14,10 +14,10 @@ from .actions import *  # Boom, Move, valid_moves, move, boom
 from .minimax import *
 import copy
 
-_BLACK_ = [(7, 0), (7, 1), (7, 3), (7, 4), (7, 6), (7, 7),
-           (6, 0), (6, 1), (6, 3), (6, 4), (6, 6), (6, 7)]
-_WHITE_ = [(1, 0), (1, 1), (1, 3), (1, 4), (1, 6), (1, 7),
-           (0, 0), (0, 1), (0, 3), (0, 4), (0, 6), (0, 7)]
+_BLACK_ = [(0, 7), (1, 7), (3, 7), (4, 7), (6, 7), (7, 7),
+           (0, 6), (1, 6), (3, 6), (4, 6), (6, 6), (7, 6)]
+_WHITE_ = [(0, 1), (1, 1), (3, 1), (4, 1), (6, 1), (7, 1),
+           (0, 0), (1, 0), (3, 0), (4, 0), (6, 0), (7, 0)]
 
 
 class ExamplePlayer:
@@ -51,7 +51,7 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
         # TODO: Decide what action to take, and return it
-        agent = MinimaxAgent(3)
+        agent = MinimaxAgent(1)
         return agent.minimax_decision(self)
 
 
