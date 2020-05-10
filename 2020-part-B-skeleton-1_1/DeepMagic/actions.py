@@ -152,9 +152,34 @@ def get_all_states(player, game_state, maximising_player):
             coordinates = action[1]
             boom(temp, coordinates, colour)
 
-        new_player_pieces = temp.pieces
-        new_enemy_pieces = temp.opponent
-
-        all_states.append((new_player_pieces, new_enemy_pieces))
+        # all_states.append((new_player_pieces, new_enemy_pieces))
+        all_states.append(temp)
 
     return all_states
+
+
+# get all the possible actions based on the turn
+def get_all_actions(game_state, maximising_player):
+    pieces, opponent = game_state
+
+    if maximising_player:
+        moves = valid_moves(pieces, opponent)
+    else:
+        moves = valid_moves(opponent, pieces)
+
+    return moves
+
+# apply the given action and return the game state without altering the given state
+def apply_action(action_obj, player, colour):
+    action = action_obj.get_tuple_form()
+    temp = copy.deepcopy(player)
+    if action[0] == "MOVE":
+        n, origin, destination = action[1:]
+        move(temp, n, origin, destination, colour)
+    else:
+        coordinates = action[1]
+        boom(temp, coordinates, colour)
+
+    return temp
+
+
