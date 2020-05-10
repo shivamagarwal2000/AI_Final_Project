@@ -81,6 +81,8 @@ class ExamplePlayer:
         """
 
         # TODO: Decide what action to take, and return it
+        print(get_all_states(self, (self.pieces, self.opponent), True))
+        
         return ("BOOM", (0, 0)) 
 
     # ------------------------------------------------------------------------ #
