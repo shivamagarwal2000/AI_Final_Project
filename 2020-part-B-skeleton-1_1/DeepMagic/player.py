@@ -48,7 +48,7 @@ class ExamplePlayer:
         """
 
         self.colour = colour
-        self.state, self.pieces, self.opponent = set_board(colour)
+        self.board, self.pieces, self.opponent = set_board(colour)
 
 
     # ------------------------------------------------------------------------ #

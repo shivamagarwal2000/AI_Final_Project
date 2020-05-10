@@ -148,24 +148,24 @@ def move(player, action, colour):
     pieces, (xa, ya), (xb,yb) = action
 
     # Increment the number of pieces at the destination tile
-    player.state[xb][yb].n += pieces
+    player.board[xb][yb].n += pieces
 
     # Update our player instance of the number of pieces at the destination tile
     # and whether it is the player's own piece or their opponent's
     if player.colour == colour:
-        player.pieces[(xb,yb)] = player.state[xb][yb].n
+        player.pieces[(xb,yb)] = player.board[xb][yb].n
 
     else:
-        player.opponent[(xb,yb)] = player.state[xb][yb].n
+        player.opponent[(xb,yb)] = player.board[xb][yb].n
 
     # Reduce the number of pieces at the source tile
-    player.state[xb][yb].colour = player.state[xa][ya].colour
-    player.state[xa][ya].n -= pieces
+    player.board[xb][yb].colour = player.board[xa][ya].colour
+    player.board[xa][ya].n -= pieces
     
     # If the source tile is now empty then remove the key from the dictionary 
     # that the player instance stores
-    if player.state[xa][ya].n == 0:
-        player.state[xa][ya].colour = None
+    if player.board[xa][ya].n == 0:
+        player.board[xa][ya].colour = None
 
         if player.colour == colour:
             del player.pieces[(xa,ya)]
@@ -177,10 +177,10 @@ def move(player, action, colour):
     # of pieces left on it
     else:
         if player.colour == colour:
-            player.pieces[(xa,ya)] = player.state[xa][ya].n
+            player.pieces[(xa,ya)] = player.board[xa][ya].n
 
         else:
-            player.opponent[(xa,ya)] = player.state[xa][ya].n
+            player.opponent[(xa,ya)] = player.board[xa][ya].n
 
 # ---------------------------------------------------------------------------- #
 # BOOM FUNCTION #
@@ -197,10 +197,10 @@ def boom(player, coordinate):
 
     # Update our board to have 0 pieces on that tile while making note of the 
     # colour of the piece(s) that exploded
-    player.state[x][y].n = 0
-    colour = player.state[x][y].colour
-    player.state[x][y].colour = None
-    
+    player.board[x][y].n = 0
+    colour = player.board[x][y].colour
+    player.board[x][y].colour = None
+
     # Remove the piece(s) from our dictionary representations of the pieces
     if player.colour == colour:
         del player.pieces[(x,y)]
@@ -210,7 +210,7 @@ def boom(player, coordinate):
 
     # Check if any other pieces near the coordinate got caught in the explosion
     for (near_x, near_y) in _NEAR_SQUARES((x,y)):
-        if player.state[near_x][near_y].n != 0:
+        if player.board[near_x][near_y].n != 0:
             boom(player, (near_x, near_y))
 
 # ---------------------------------------------------------------------------- #
