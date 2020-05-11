@@ -14,31 +14,36 @@
 # Eval(s) = w1f1(s) + w2f2(s) + . . . + wnfn(s)
 
 
-def get_no_pieces(game_state, type):
+def get_no_pieces(player_pieces):
     ans = 0
-    for i in range(0, 8):
-        for j in range(0, 8):
-            if game_state.x == i and game_state.y == j:
-                if game_state.piece_type == type:
-                    ans += game_state.no_of_pieces
+    for piece in player_pieces.keys():
+        n = player_pieces[piece]
+        ans += n
 
     return ans
 
 
-def eval(game_state):
-    frnd_pieces = get_no_pieces(game_state, frnd)
-    enem_pieces = get_no_pieces(game_state, enem)
+# find the chaining score of a state - the difference between the max chain size of player and the opponent
+# def chaining_score()
+
+
+def evaluate(player):
+    frnd_pieces = get_no_pieces(player.pieces)
+    enem_pieces = get_no_pieces(player.opponent)
     weight = 10
+
+    if frnd_pieces == 0 and enem_pieces != 0:
+        return -10000
+    elif enem_pieces == 0 and frnd_pieces != 0:
+        return 10000
 
     return weight * (frnd_pieces - enem_pieces)
 
 
-def utility(game_state):
-    enem_pieces = get_no_pieces(game_state, enem)
-    frnd_pieces = get_no_pieces(game_state, frnd)
-    if enem_pieces == 0:
-        return 1000
-    elif frnd_pieces == 0:
-        return -1000
+def terminal(player):
+    frnd_pieces = get_no_pieces(player.pieces)
+    enem_pieces = get_no_pieces(player.opponent)
+    if enem_pieces == 0 or frnd_pieces == 0:
+        return True
     else:
-        return 0
+        return False

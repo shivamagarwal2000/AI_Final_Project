@@ -268,35 +268,19 @@ def get_all_states(player, game_state, maximising_player):
 # algorithm is on and whether we are trying to maximise our player or the 
 # opponent as input and returns the best action to play.
 
-def minimax(player, game_state, depth, maximising_player):
-
-    # If we reached our max depth then we evaluate the current game state
-    if depth == 0 or terminal(game_state) == True:
-        return eval(game_state)
-
-    # Find all the possible states
-    all_states = get_all_states(player, game_state, maximising_player)
-
-    # Iterate through the possible states and find the most optimal state that 
-    # we want to be in, taking note whether we are trying to maximise ourselves 
-    # or if the opponent is trying to minimise us
-    if maximising_player:
-
-        value = -1000000
-
-        for child in all_states:
-            value = max(value, minimax(child, depth - 1, False))
-
-        return value
-
+# apply the given action and return the game state without altering the given state
+def apply_action(action_obj, player):
+    action = action_obj.get_tuple_form()
+    temp = copy.deepcopy(player)
+    if action[0] == "MOVE":
+        n, origin, destination = action[1:]
+        move(temp, n, origin, destination, player.colour)
     else:
+        coordinates = action[1]
+        boom(temp, coordinates, player.colour)
 
-        value = 1000000
+    return temp
 
-        for child in all_states:
-            value = min(value, minimax(child, depth - 1, True))
-
-        return value
 
 # ============================================================================ #
 
