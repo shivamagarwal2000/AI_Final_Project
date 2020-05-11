@@ -52,6 +52,7 @@ class ExamplePlayer:
 
         self.colour = colour
         self.board, self.pieces, self.opponent = set_board(colour)
+        self.no_of_move = 0
 
     # ------------------------------------------------------------------------ #
     # ACTION FUNCTION #
@@ -71,9 +72,9 @@ class ExamplePlayer:
         represented based on the spec's instructions for representing actions.
         """
         # TODO: Decide what action to take, and return it
-        agent = MinimaxAgent(1)
+        self.no_of_move += 1
+        agent = MinimaxAgent(1, self.no_of_move)
         return agent.minimax_decision(self)
-
 
         # ------------------------------------------------------------------------ #
 

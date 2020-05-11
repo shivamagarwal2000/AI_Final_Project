@@ -277,3 +277,9 @@ def apply_action(action_obj, player):
         boom(temp, action[1])
 
     return temp
+
+
+def remove_booms(list_actions):
+    for act in list_actions:
+        if act.name == "BOOM":
+            list_actions.remove(act)
