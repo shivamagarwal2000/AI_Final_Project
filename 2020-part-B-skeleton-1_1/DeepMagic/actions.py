@@ -228,17 +228,16 @@ def boom(player, coordinate):
 #
 # game_state will be in the form of (self.pieces, self.opponent)
 
-def get_all_states(player, game_state, maximising_player):
+def get_all_states(player, maximising_player):
     all_states = []
-    pieces, opponent = game_state
 
     # Get the colour of the player to maximise and the list of possible actions
     # that the player can take
     if maximising_player:
-        moves = valid_moves(pieces, opponent)
+        moves = valid_moves(player.pieces, player.opponent)
         colour = player.colour
     else:
-        moves = valid_moves(opponent, pieces)
+        moves = valid_moves(player.opponent, player.pieces)
         if player.colour == "white":
             colour = "black"
         else:
@@ -251,10 +250,7 @@ def get_all_states(player, game_state, maximising_player):
 
         temp.update(colour, action)
 
-        new_player_pieces = temp.pieces
-        new_opponent_pieces = temp.opponent
-
-        all_states.append((new_player_pieces, new_opponent_pieces))
+        all_states.append(temp)
 
     return all_states
 
@@ -276,10 +272,8 @@ def apply_action(action_obj, player):
     action = action_obj.get_tuple_form()
     temp = copy.deepcopy(player)
     if action[0] == "MOVE":
-        n, origin, destination = action[1:]
-        move(temp, n, origin, destination, player.colour)
+        move(temp, action[1:], temp.colour)
     else:
-        coordinates = action[1]
-        boom(temp, coordinates, player.colour)
+        boom(temp, action[1])
 
     return temp

@@ -11,9 +11,10 @@
 # Player module holds all the classes and functions required to define the
 # player that will be playing the Expendibots game .
 
-from DeepMagic.actions import *
-from DeepMagic.evaluation import *
+from .actions import *
+from .evaluation import *
 from referee.game import _BLACK_START_SQUARES, _WHITE_START_SQUARES
+from .minimax import *
 
 
 # ============================================================================ #
