@@ -13,6 +13,7 @@
 
 from DeepMagic.actions import * 
 from DeepMagic.evaluation import *
+from referee.game import _BLACK_START_SQUARES, _WHITE_START_SQUARES
                         
 # ============================================================================ #
 # EXAMPLEPLAYER CLASS #
@@ -145,18 +146,14 @@ class CellObject:
 def set_board(colour):
 
     # Initial coordinates of the pieces
-    _BLACK_ = [(7,0), (7,1), (7,3), (7,4), (7,6), (7,7), 
-                (6,0), (6,1), (6,3), (6,4), (6,6), (6,7)]
-    _WHITE_ = [(1,0), (1,1), (1,3), (1,4), (1,6), (1,7), 
-                (0,0), (0,1), (0,3), (0,4), (0,6), (0,7)]
-
+    
     if colour == "white":
-        player_pieces = _WHITE_
-        opponent_pieces = _BLACK_
+        player_pieces = _WHITE_START_SQUARES
+        opponent_pieces = _BLACK_START_SQUARES
         opponent_colour = "black"
     else:
-        player_pieces = _BLACK_
-        opponent_pieces = _WHITE_
+        player_pieces = _BLACK_START_SQUARES
+        opponent_pieces = _WHITE_START_SQUARES
         opponent_colour = "white"
 
     
