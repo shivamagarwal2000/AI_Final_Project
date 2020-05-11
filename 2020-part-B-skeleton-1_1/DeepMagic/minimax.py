@@ -1,16 +1,46 @@
-# the minimax algorithm that decides which action to play next
+# Assignment 2 COMP30024: Artificial Intelligence Semester 1 2020
 
-from .actions import *
+# Group Name: DeepMagic
+# 
+# Student 1 Name: Chan Jie Ho
+# Student 1 Number: 961948
+#
+# Student 2 Name: Shivam Agarwal
+# Student 2 Number: 951424
 
-from .evaluation import *
+# Minimax module holds all the classes and functions required to define the
+# minimax algorithm that decides which is the best action to play next.
+
+from DeepMagic.actions import *
+from DeepMagic.evaluation import *
 import random
 
+# ============================================================================ #
+# MINIMAXAGENT CLASS #
+# ------------------ #
+#
+# MinimaxAgent facade that runs the minimax algorithm.
 
 class MinimaxAgent:
 
-    def __init__(self, max_depth):
+    # __INIT__ FUNCTION #
+    # ----------------- #
+    #
+    # MinimaxAgent constructor that defines how far ahead the minimax algorithm 
+    # will look when determining the best action.
+    #
+    # It takes max depth of the tree as input.
 
+    def __init__(self, max_depth):
         self.max_depth = max_depth
+
+    # ------------------------------------------------------------------------ #
+    # MINIMAX_DECISION FUNCTION #
+    # ------------------------- #
+    #
+    # Minimax helper function that decides what action the player should take.
+    #
+    # It returns the best possible action based on the values given.
 
     def minimax_decision(self, player):
         list_actions = valid_moves(player.pieces, player.opponent)
@@ -18,7 +48,7 @@ class MinimaxAgent:
         value = [None] * len(list_actions)
         
         for i, action in enumerate(list_actions):
-            temp_player = apply_action(action, player)
+            temp_player = apply_action(player, action)
             value[i] = self.minimax_val(temp_player, self.max_depth, False)
             # print(value[i])
         
@@ -30,6 +60,16 @@ class MinimaxAgent:
                 index = i
         # return random.choice(list_actions).get_tuple_form()
         return list_actions[index].get_tuple_form()
+
+    # ------------------------------------------------------------------------ #
+    # MINIMAX_VAL FUNCTION #
+    # -------------------- #
+    #
+    # Minimax helper function that finds the value of each branch in the tree.
+    #
+    # It takes in our player instance, the current game state, the depth that 
+    # the algorithm is on and whether we are trying to maximise our player or
+    # the opponent as input and returns the best action to play.
 
     def minimax_val(self, player, depth, maximising_player):
         if depth == 0 or terminal(player) == True:
@@ -49,3 +89,7 @@ class MinimaxAgent:
             for child in all_states:
                 value = min(value, self.minimax_val(child, depth - 1, True))
             return value
+
+# ============================================================================ #
+
+# :)

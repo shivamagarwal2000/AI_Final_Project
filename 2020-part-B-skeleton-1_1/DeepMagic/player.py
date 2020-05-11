@@ -16,8 +16,6 @@ from DeepMagic.evaluation import *
 from DeepMagic.minimax import *
 from referee.game import _BLACK_START_SQUARES, _WHITE_START_SQUARES
 
-
-
 # ============================================================================ #
 # EXAMPLEPLAYER CLASS #
 # ------------------- #
@@ -39,7 +37,6 @@ class ExamplePlayer:
     # It takes the colour of the player (either "black" or "white") as input.
 
     def __init__(self, colour):
-
         """
         This method is called once at the beginning of the game to initialise
         your player. You should use this opportunity to set up your own internal
@@ -50,7 +47,6 @@ class ExamplePlayer:
         program will play as (White or Black). The value will be one of the
         strings "white" or "black" correspondingly.
         """
-
         self.colour = colour
         self.board, self.pieces, self.opponent = set_board(colour)
 
@@ -71,12 +67,10 @@ class ExamplePlayer:
         return an allowed action to play on this turn. The action must be
         represented based on the spec's instructions for representing actions.
         """
-        # TODO: Decide what action to take, and return it
-        agent = MinimaxAgent(1)
-        return agent.minimax_decision(self)
+        # agent = MinimaxAgent(1)
+        return MinimaxAgent(1).minimax_decision(self)
 
-
-        # ------------------------------------------------------------------------ #
+    # ------------------------------------------------------------------------ #
 
     # UPDATE FUNCTION #
     # --------------- #
@@ -111,30 +105,28 @@ class ExamplePlayer:
         # Determine if the action was a move or boom action and perform it
         if action[0] == "MOVE":
             move(self, action[1:], colour)
+
         else:
             boom(self, action[1])
-
 
 # ============================================================================ #
 # CELLOBJECT CLASS #
 # ---------------- #
 #
-# CellObject class that makes up each individual tile in the 8x8 matrix.
+# CellObject class that makes up each individual tile in the 8x8 matrix and 
+# what it holds.
+# 
+# It requires the number of pieces on that tile and the type of the pieces 
+# (whether the algorithm will be finding the max of it – the player – or the 
+# min – the opponent) and the coordinates.
+
 
 class CellObject:
-
-    # __INIT__ FUNCTION #
-    # ----------------- #
-
-    # CellObject constructor that sets what each tile holds.
-
-    # It takes in the number of pieces on that tile and the type of the pieces (whether the algorithm will be finding the max of it – the player – or the min – the opponent) and the coordinates.
 
     def __init__(self, n, colour, coordinate):
         self.n = n
         self.colour = colour
         self.coordinate = coordinate
-
 
 # ============================================================================ #
 # SET_BOARD FUNCTION #
@@ -148,12 +140,12 @@ class CellObject:
 # opponent's pieces and how many pieces are on each coordinate.
 
 def set_board(colour):
-    # Initial coordinates of the pieces
 
     if colour == "white":
         player_pieces = _WHITE_START_SQUARES
         opponent_pieces = _BLACK_START_SQUARES
         opponent_colour = "black"
+
     else:
         player_pieces = _BLACK_START_SQUARES
         opponent_pieces = _WHITE_START_SQUARES

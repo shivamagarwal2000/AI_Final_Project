@@ -14,7 +14,6 @@
 from referee.game import _NEXT_SQUARES, _NEAR_SQUARES
 import copy
 
-
 # ============================================================================ #
 # ACTION CLASS #
 # ------------ #
@@ -28,7 +27,6 @@ class Action:
     def __init__(self, name):
         self.name = name
 
-
 # ============================================================================ #
 # BOOM CLASS #
 # ---------- #
@@ -38,15 +36,15 @@ class Action:
 # It requires the coordinates of the tile to boom.
 
 class Boom(Action):
+    
     def __init__(self, coord):
         super().__init__('BOOM')
         self.x = coord[0]
         self.y = coord[1]
 
     def get_tuple_form(self):
-        # ("BOOM", (x, y))
-        my_tuple = (self.name, (self.x, self.y))
-        return my_tuple
+        # ("BOOM", (x, y))        
+        return (self.name, (self.x, self.y))
 
 
 # ============================================================================ #
@@ -59,6 +57,7 @@ class Boom(Action):
 # and destination tiles.
 
 class Move(Action):
+
     def __init__(self, no, s_coord, d_coord):
         super().__init__('MOVE')
         self.no_of_pieces = no
@@ -69,8 +68,7 @@ class Move(Action):
 
     def get_tuple_form(self):
         # ("MOVE", n, (xa, ya), (xb, yb))
-        my_tuple = (self.name, self.no_of_pieces, (self.src_x, self.src_y), (self.dst_x, self.dst_y))
-        return my_tuple
+        return (self.name, self.no_of_pieces, (self.src_x, self.src_y), (self.dst_x, self.dst_y))
 
 
 # ============================================================================ #
@@ -84,6 +82,7 @@ class Move(Action):
 # and returns a list of all the possible movements.
 
 def valid_moves(player_pieces, enemy_pieces):
+
     valid = []
     direction = ['N', 'S', 'E', 'W']
 
@@ -146,6 +145,7 @@ def valid_moves(player_pieces, enemy_pieces):
 # The action input will be in the form of n, (xa, ya), (xb, yb).
 
 def move(player, action, colour):
+
     pieces, (xa, ya), (xb, yb) = action
 
     # Increment the number of pieces at the destination tile
@@ -194,6 +194,7 @@ def move(player, action, colour):
 # It takes our player instance, and the coordinate of the boom as input.
 
 def boom(player, coordinate):
+
     x, y = coordinate
 
     # Update our board to have 0 pieces on that tile while making note of the
@@ -229,6 +230,7 @@ def boom(player, coordinate):
 # game_state will be in the form of (self.pieces, self.opponent)
 
 def get_all_states(player, maximising_player):
+
     all_states = []
 
     # Get the colour of the player to maximise and the list of possible actions
@@ -259,33 +261,25 @@ def get_all_states(player, maximising_player):
 # APPLY_ACTION FUNCTION #
 # --------------------- #
 #
-# Minimax algorithm function that decides which is the best action to play next.
+# Helper function that applies the given action without altering the player 
+# with the given game state.
 #
-# It takes in our player instance, the current game state, the depth that the
-# algorithm is on and whether we are trying to maximise our player or the
-# opponent as input and returns the best action to play.
+# It takes in our player instance which has the current game state, and the 
+# action as input and returns a copy of the player with the new game state.
 
+def apply_action(player, action_obj):
 
-
-
-# apply the given action and return the game state without altering the given state
-def apply_action(action_obj, player):
     action = action_obj.get_tuple_form()
     temp = copy.deepcopy(player)
+
     if action[0] == "MOVE":
         move(temp, action[1:], temp.colour)
+
     else:
         boom(temp, action[1])
 
     return temp
 
+# ============================================================================ #
 
-# ---------------------------------------------------------------------------- #
-# MINIMAX FUNCTION #
-# ---------------- #
-#
-# Minimax algorithm function that decides which is the best action to play next.
-#
-# It takes in our player instance, the current game state, the depth that the
-# algorithm is on and whether we are trying to maximise our player or the
-# opponent as input and returns the best action to play.
+# :)
