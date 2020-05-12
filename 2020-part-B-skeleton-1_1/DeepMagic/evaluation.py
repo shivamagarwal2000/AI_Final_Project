@@ -302,6 +302,7 @@ def clustering_score(pieces, player):
     clusters = find_all_clusters(pieces)
     clusters_count = 0
     clusters_size_average = 0
+    
     for cluster in clusters:
         clusters_count += 1
         clusters_size_average += cluster[1]
