@@ -14,10 +14,11 @@
 # Eval(s) = w1f1(s) + w2f2(s) + . . . + wnfn(s)
 
 from referee.game import _NEAR_SQUARES
+from .actions import *
 import copy
 
-_PLAYER_PIECES_COUNT_WEIGHT_ = 10
-_OPPONENT_PIECES_COUNT_WEIGHT_ = -5
+_PLAYER_PIECES_COUNT_WEIGHT_ = 1000
+_OPPONENT_PIECES_COUNT_WEIGHT_ = -400
 
 _PLAYER_STACKS_WEIGHT_ = 10
 _OPPONENT_STACKS_WEIGHT_ = -5
@@ -55,6 +56,34 @@ _OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 5
 # - Average size of enemy clusters
 # - Clustering score
 
+
+def boom_score(player):
+    pieces = player.pieces
+    ans = 0
+    for piece in pieces.keys():
+        temp = copy.deepcopy(player)
+        boom(temp, piece)
+        resultant = sum(temp.pieces.values()) - sum(temp.opponent.values())
+        original = sum(pieces.values()) - sum(player.opponent.values())
+        ans += (resultant - original)
+
+    return ans
+
+
+def find_min_distance(pieces, opponent):
+    ans = 0
+    for f_piece in pieces.keys():
+        x1, y1 = f_piece
+        for e_piece in opponent.keys():
+            x2, y2 = e_piece
+            dist = abs(x2-x1) + abs(y2-y1)
+            ans += dist
+
+    return ans
+
+
+
+
 def evaluate(player):
     pieces = player.pieces
     opponent = player.opponent
@@ -72,16 +101,21 @@ def evaluate(player):
     value += _PLAYER_PIECES_COUNT_WEIGHT_ * player_pieces
     value += _OPPONENT_PIECES_COUNT_WEIGHT_ * opponent_pieces
 
-    value += _PLAYER_STACKS_WEIGHT_ * stacks_score(pieces)
-    value += _OPPONENT_STACKS_WEIGHT_ * stacks_score(opponent)
+    # value -= find_min_distance(pieces, opponent)
 
-    value += _PLAYER_MAX_HEIGHT_WEIGHT_ * max(pieces.values())
-    value += _OPPONENT_MAX_HEIGHT_WEIGHT_ * max(opponent.values())
 
-    value += clustering_score(pieces, True)
-    value += clustering_score(opponent, False)
+    # value += boom_score(player) * 5
 
-    value += danger_clustering_score(pieces, opponent)
+    # value += _PLAYER_STACKS_WEIGHT_ * stacks_score(pieces)
+    # value += _OPPONENT_STACKS_WEIGHT_ * stacks_score(opponent)
+    #
+    # value += _PLAYER_MAX_HEIGHT_WEIGHT_ * max(pieces.values())
+    # value += _OPPONENT_MAX_HEIGHT_WEIGHT_ * max(opponent.values())
+
+    # value += clustering_score(pieces, True)
+    # value += clustering_score(opponent, False)
+    #
+    # value += danger_clustering_score(pieces, opponent)
 
     return value
 

@@ -17,7 +17,7 @@ class MinimaxAgent:
         list_actions = valid_moves(player.pieces, player.opponent)
 
         # print(len(list_actions))
-        if self.move_no < 10:
+        if self.move_no < 5:
             remove_booms(list_actions)
 
         length = len(list_actions)
@@ -33,7 +33,10 @@ class MinimaxAgent:
 
         for i, action in enumerate(list_actions):
             temp_player = apply_action(action, player)
-            value[i] = self.minimax_val(temp_player, self.max_depth, False)
+            if self.max_depth < 2:
+                value[i] = evaluate(temp_player)
+            else:
+                value[i] = self.minimax_val(temp_player, self.max_depth, False)
             # print(value[i])
 
         maximum = -10000
