@@ -100,6 +100,7 @@ def evaluate(player):
 def stacks_score(pieces):
 
     value = 0
+    
     for coordinate in pieces.keys():
         n = pieces[coordinate]
 
