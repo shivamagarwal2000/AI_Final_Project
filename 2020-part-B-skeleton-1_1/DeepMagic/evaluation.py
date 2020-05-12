@@ -16,8 +16,8 @@
 from referee.game import _NEAR_SQUARES
 import copy
 
-_PLAYER_PIECES_COUNT_WEIGHT_ = 1000
-_OPPONENT_PIECES_COUNT_WEIGHT_ = -400
+_PLAYER_PIECES_COUNT_WEIGHT_ = 100
+_OPPONENT_PIECES_COUNT_WEIGHT_ = -40
 
 _PLAYER_STACKS_WEIGHT_ = 10
 _OPPONENT_STACKS_WEIGHT_ = -5
@@ -25,14 +25,14 @@ _OPPONENT_STACKS_WEIGHT_ = -5
 _PLAYER_MAX_HEIGHT_WEIGHT_ = 10
 _OPPONENT_MAX_HEIGHT_WEIGHT_ = -5
 
-_PLAYER_CLUSTER_COUNT_WEIGHT_ = -10
-_OPPONENT_CLUSTER_COUNT_WEIGHT_ = 5
+_PLAYER_CLUSTER_COUNT_WEIGHT_ = -5
+_OPPONENT_CLUSTER_COUNT_WEIGHT_ = 10
 
-_PLAYER_CLUSTER_SIZE_WEIGHT_ = -10
-_OPPONENT_CLUSTER_SIZE_WEIGHT_ = 5
+_PLAYER_CLUSTER_SIZE_WEIGHT_ = -5
+_OPPONENT_CLUSTER_SIZE_WEIGHT_ = 10
 
-_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ = -10
-_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 5
+_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ = -5
+_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 10
 
 # ============================================================================ #
 # EVALUATE FUNCTION #
@@ -78,6 +78,9 @@ def evaluate(player):
 
     value += _PLAYER_STACKS_WEIGHT_ * stacks_score(pieces)
     value += _OPPONENT_STACKS_WEIGHT_ * stacks_score(opponent)
+
+    if not pieces.values() or not opponent.values():
+        return value
     
     value += _PLAYER_MAX_HEIGHT_WEIGHT_ * max(pieces.values())
     value += _OPPONENT_MAX_HEIGHT_WEIGHT_ * max(opponent.values())
