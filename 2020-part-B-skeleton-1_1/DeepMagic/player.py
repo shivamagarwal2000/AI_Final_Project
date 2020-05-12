@@ -45,6 +45,7 @@ class ExamplePlayer:
         """    
         self.colour = colour
         self.board, self.pieces, self.opponent = set_board(colour)
+        self.no_of_move = 0
 
     # ------------------------------------------------------------------------ #
     # ACTION FUNCTION #
@@ -63,7 +64,8 @@ class ExamplePlayer:
         return an allowed action to play on this turn. The action must be
         represented based on the spec's instructions for representing actions.
         """
-        return MinimaxAgent(1).minimax_decision(self)
+        self.no_of_move += 1
+        return MinimaxAgent(1, self.no_of_move).minimax_decision(self)
 
     # ------------------------------------------------------------------------ #
 

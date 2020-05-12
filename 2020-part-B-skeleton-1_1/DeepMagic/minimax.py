@@ -31,8 +31,9 @@ class MinimaxAgent:
     #
     # It takes max depth of the tree as input.
 
-    def __init__(self, max_depth):
+    def __init__(self, max_depth, move_no):
         self.max_depth = max_depth
+        self.move_no = move_no
 
     # ------------------------------------------------------------------------ #
     # MINIMAX_DECISION FUNCTION #
@@ -45,13 +46,22 @@ class MinimaxAgent:
     def minimax_decision(self, player):
 
         list_actions = valid_moves(player.pieces, player.opponent)
-        # print(len(list_actions))
-        value = [None] * len(list_actions)
+
+        if self.move_no < 10:
+            remove_booms(list_actions)
+
+        length = len(list_actions)
+        value = [None] * length
+
+        if length < 20:
+            self.max_depth = 2
+
+        elif length < 10:
+            self.max_depth = 3
         
         for i, action in enumerate(list_actions):
             temp_player = apply_action(player, action)
             value[i] = self.minimax_val(temp_player, self.max_depth, False)
-            # print(value[i])
         
         maximum = -10000
         
@@ -74,7 +84,8 @@ class MinimaxAgent:
 
     def minimax_val(self, player, depth, maximising_player):
 
-        if depth == 0 or not sum(player.pieces.values()) or not sum(player.opponent.values()):
+        # if depth == 0 or not sum(player.pieces.values()) or not sum(player.opponent.values()):
+        if depth == 0:
             return evaluate(player)
 
         # apply all actions to the state and return the list of all the possible states
