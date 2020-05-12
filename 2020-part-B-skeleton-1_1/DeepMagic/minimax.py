@@ -55,7 +55,11 @@ class MinimaxAgent:
         
         for i, action in enumerate(list_actions):
             temp_player = apply_action(player, action)
-            value[i] = self.minimax_val(temp_player, self.max_depth, False)
+
+            if self.max_depth <= 1:
+                value[i] = evaluate(temp_player)
+            else :
+                value[i] = self.minimax_val(temp_player, self.max_depth, False)
         
         maximum = -10000
         
