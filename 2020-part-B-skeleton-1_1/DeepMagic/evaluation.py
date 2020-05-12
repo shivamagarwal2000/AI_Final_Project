@@ -16,23 +16,23 @@
 from referee.game import _NEAR_SQUARES
 import copy
 
-_PLAYER_PIECES_COUNT_WEIGHT_ = 3
-_OPPONENT_PIECES_COUNT_WEIGHT_ = -0.5
+_PLAYER_PIECES_COUNT_WEIGHT_ = 10
+_OPPONENT_PIECES_COUNT_WEIGHT_ = -7
 
-_PLAYER_STACKS_WEIGHT_ = 4
-_OPPONENT_STACKS_WEIGHT_ = -1
+_PLAYER_STACKS_WEIGHT_ = 3
+_OPPONENT_STACKS_WEIGHT_ = -3
 
-_PLAYER_MAX_HEIGHT_WEIGHT_ = 6
-_OPPONENT_MAX_HEIGHT_WEIGHT_ = -2
+_PLAYER_MAX_HEIGHT_WEIGHT_ = 1
+_OPPONENT_MAX_HEIGHT_WEIGHT_ = -0.5
 
-_PLAYER_CLUSTER_COUNT_WEIGHT_ = 10
-_OPPONENT_CLUSTER_COUNT_WEIGHT_ = -7
+_PLAYER_CLUSTER_COUNT_WEIGHT_ = 8
+_OPPONENT_CLUSTER_COUNT_WEIGHT_ = -6
 
-_PLAYER_CLUSTER_SIZE_WEIGHT_ = -15
-_OPPONENT_CLUSTER_SIZE_WEIGHT_ = 10
+_PLAYER_CLUSTER_SIZE_WEIGHT_ = -5
+_OPPONENT_CLUSTER_SIZE_WEIGHT_ = 3
 
-_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ = -15
-_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 10
+_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ = -20
+_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 15
 
 # ============================================================================ #
 # EVALUATE FUNCTION #
@@ -99,12 +99,12 @@ def evaluate(player):
 
 def stacks_score(pieces):
 
-    value = 1
+    value = 0
     for coordinate in pieces.keys():
         n = pieces[coordinate]
 
         if n > 1:
-            value += n - 1
+            value += 1
 
     return value
 
@@ -177,9 +177,6 @@ def connected_clusters(player_pieces, opponent_pieces):
 
                         for piece in opponent_cluster: 
                             connected_opponents.append(piece)
-
-                        # for piece in cluster: 
-                        #     connected_players.append(piece)
 
                         connected_opponent_pieces += opponent_cluster_number
 
