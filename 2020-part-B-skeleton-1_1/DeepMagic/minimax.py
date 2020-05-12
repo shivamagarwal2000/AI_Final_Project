@@ -43,6 +43,7 @@ class MinimaxAgent:
     # It returns the best possible action based on the values given.
 
     def minimax_decision(self, player):
+
         list_actions = valid_moves(player.pieces, player.opponent)
         # print(len(list_actions))
         value = [None] * len(list_actions)
@@ -72,7 +73,8 @@ class MinimaxAgent:
     # the opponent as input and returns the best action to play.
 
     def minimax_val(self, player, depth, maximising_player):
-        if depth == 0 or terminal(player) == True:
+
+        if depth == 0 or not sum(player.pieces.values()) or not sum(player.opponent.values()):
             return evaluate(player)
 
         # apply all actions to the state and return the list of all the possible states

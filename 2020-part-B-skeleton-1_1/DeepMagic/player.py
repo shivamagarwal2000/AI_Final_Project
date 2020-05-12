@@ -9,7 +9,10 @@
 # Student 2 Number: 951424
 
 # Player module holds all the classes and functions required to define the
-# player that will be playing the Expendibots game .
+# player that will be playing the Expendibots game. The player should be able 
+# to keep track of their pieces as well as their opponent's, and choose the 
+# best possible action from the all the possible movements using a minimax
+# algorithm, updating after each player's turn.
 
 from DeepMagic.actions import *
 from DeepMagic.evaluation import *
@@ -21,20 +24,13 @@ from referee.game import _BLACK_START_SQUARES, _WHITE_START_SQUARES
 # ------------------- #
 #
 # ExamplePlayer class that will play the Expendibots game, keeping track of its
-# own pieces and the opponents pieces, then choosing the best possible action
-# from the all the possible movements using a minimax algorithm, updating after
-# each player's turn.
+# own pieces and the opponents pieces by setting up an 8x8 matrix of the board 
+# as well as two dictionaries of the coordinates of the pieces and the number 
+# of pieces on that coordinate (like Assignment 1).
+#
+# It takes the colour of the player (either "black" or "white") as input.
 
 class ExamplePlayer:
-
-    # __INIT__ FUNCTION #
-    # ----------------- #
-    #
-    # Player constructor that sets up an 8x8 matrix of the board as well as two
-    # dictionaries that will allow the player to keep track of the pieces that
-    # the player/opponent controls.
-    #
-    # It takes the colour of the player (either "black" or "white") as input.
 
     def __init__(self, colour):
         """
@@ -46,7 +42,7 @@ class ExamplePlayer:
         The parameter colour will be a string representing the player your
         program will play as (White or Black). The value will be one of the
         strings "white" or "black" correspondingly.
-        """
+        """    
         self.colour = colour
         self.board, self.pieces, self.opponent = set_board(colour)
 
@@ -67,7 +63,6 @@ class ExamplePlayer:
         return an allowed action to play on this turn. The action must be
         represented based on the spec's instructions for representing actions.
         """
-        # agent = MinimaxAgent(1)
         return MinimaxAgent(1).minimax_decision(self)
 
     # ------------------------------------------------------------------------ #
@@ -83,7 +78,6 @@ class ExamplePlayer:
     # the action performed.
 
     def update(self, colour, action):
-
         """
         This method is called at the end of every turn (including your player’s
         turns) to inform your player about the most recent action. You should
@@ -101,7 +95,7 @@ class ExamplePlayer:
         for the player colour (your method does not need to validate the action
         against the game rules).
         """
-
+        
         # Determine if the action was a move or boom action and perform it
         if action[0] == "MOVE":
             move(self, action[1:], colour)

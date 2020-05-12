@@ -11,7 +11,7 @@
 # Actions module holds all the classes and functions required to define the
 # actions taken in the game.
 
-from referee.game import _NEXT_SQUARES, _NEAR_SQUARES
+from referee.game import _NEAR_SQUARES
 import copy
 
 # ============================================================================ #
@@ -36,7 +36,7 @@ class Action:
 # It requires the coordinates of the tile to boom.
 
 class Boom(Action):
-    
+
     def __init__(self, coord):
         super().__init__('BOOM')
         self.x = coord[0]
@@ -130,7 +130,6 @@ def valid_moves(player_pieces, enemy_pieces):
                             valid.append(Move(n, (x, y), (dest_x, dest_y)))
 
     return valid
-
 
 # ---------------------------------------------------------------------------- #
 # MOVE FUNCTION #
