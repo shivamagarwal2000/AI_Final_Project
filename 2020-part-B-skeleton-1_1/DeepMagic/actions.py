@@ -279,6 +279,20 @@ def apply_action(player, action_obj):
 
     return temp
 
+# ---------------------------------------------------------------------------- #
+# REMOVE_BOOMS FUNCTION #
+# --------------------- #
+#
+# Helper function that removes all the boom actions from the list of actions.
+#
+# It takes in the list of valid actions, and removes the booms from that list.
+
+def remove_booms(list_actions):
+
+    for act in list_actions:
+        if act.name == "BOOM":
+            list_actions.remove(act)
+
 # ============================================================================ #
 
 # :)
