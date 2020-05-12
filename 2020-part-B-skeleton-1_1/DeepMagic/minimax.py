@@ -69,8 +69,9 @@ class MinimaxAgent:
             if val > maximum:
                 maximum = val
                 index = i
-        # return random.choice(list_actions).get_tuple_form()
+        
         return list_actions[index].get_tuple_form()
+        
 
     # ------------------------------------------------------------------------ #
     # MINIMAX_VAL FUNCTION #

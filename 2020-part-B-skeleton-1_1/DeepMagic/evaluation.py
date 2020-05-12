@@ -16,23 +16,23 @@
 from referee.game import _NEAR_SQUARES
 import copy
 
-_PLAYER_PIECES_COUNT_WEIGHT_ = 10
-_OPPONENT_PIECES_COUNT_WEIGHT_ = -5
+_PLAYER_PIECES_COUNT_WEIGHT_ = 3
+_OPPONENT_PIECES_COUNT_WEIGHT_ = -0.5
 
-_PLAYER_STACKS_WEIGHT_ = 10
-_OPPONENT_STACKS_WEIGHT_ = -5
+_PLAYER_STACKS_WEIGHT_ = 4
+_OPPONENT_STACKS_WEIGHT_ = -1
 
-_PLAYER_MAX_HEIGHT_WEIGHT_ = 10
-_OPPONENT_MAX_HEIGHT_WEIGHT_ = -5
+_PLAYER_MAX_HEIGHT_WEIGHT_ = 6
+_OPPONENT_MAX_HEIGHT_WEIGHT_ = -2
 
-_PLAYER_CLUSTER_COUNT_WEIGHT_ = -10
-_OPPONENT_CLUSTER_COUNT_WEIGHT_ = 5
+_PLAYER_CLUSTER_COUNT_WEIGHT_ = 10
+_OPPONENT_CLUSTER_COUNT_WEIGHT_ = -7
 
-_PLAYER_CLUSTER_SIZE_WEIGHT_ = -10
-_OPPONENT_CLUSTER_SIZE_WEIGHT_ = 5
+_PLAYER_CLUSTER_SIZE_WEIGHT_ = -15
+_OPPONENT_CLUSTER_SIZE_WEIGHT_ = 10
 
-_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ = -10
-_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 5
+_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ = -15
+_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 10
 
 # ============================================================================ #
 # EVALUATE FUNCTION #
@@ -127,11 +127,8 @@ def danger_clustering_score(player_pieces, opponent_pieces):
 
     for connected_cluster in all_connected_clusters:
 
-        player_cluster_size = len(connected_cluster["player"])
-        opponent_cluster_size = len(connected_cluster["opponent"])
-
-        value += (_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ * player_cluster_size)
-        value += (_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ * opponent_cluster_size)
+        value += (_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ * connected_cluster["player pieces"])
+        value += (_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ * connected_cluster["opponent pieces"])
     
     return value
 
@@ -161,6 +158,8 @@ def connected_clusters(player_pieces, opponent_pieces):
             connected = {}
             connected_players = []
             connected_opponents = []
+            connected_player_pieces = 0
+            connected_opponent_pieces = 0
 
             surrounding_tiles = surrounding_cluster(cluster)
 
@@ -179,13 +178,15 @@ def connected_clusters(player_pieces, opponent_pieces):
                         for piece in opponent_cluster: 
                             connected_opponents.append(piece)
 
-                        for piece in cluster: 
-                            connected_players.append(piece)
+                        # for piece in cluster: 
+                        #     connected_players.append(piece)
+
+                        connected_opponent_pieces += opponent_cluster_number
 
                 # If found another one of our clusters
                 elif tile in player_pieces:
                     if tile not in connected_players:
-                        for checking_cluster in player_clusters:
+                        for checking_cluster, checking_cluster_number in player_clusters:
                             if tile in checking_cluster:
                                 checked_clusters.append(checking_cluster)
 
@@ -195,9 +196,14 @@ def connected_clusters(player_pieces, opponent_pieces):
                                 for piece in checking_cluster: 
                                     connected_players.append(piece)
 
+                                connected_player_pieces += checking_cluster_number
+                                
+
             if connected_players:
                 connected["player"] = connected_players
                 connected["opponent"] = connected_opponents
+                connected["player pieces"] = connected_player_pieces
+                connected["opponent pieces"] = connected_opponent_pieces
                 connecting_clusters.append(connected)
 
     return connecting_clusters
