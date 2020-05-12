@@ -16,23 +16,23 @@
 from referee.game import _NEAR_SQUARES
 import copy
 
-_PLAYER_PIECES_COUNT_WEIGHT_ = 10
-_OPPONENT_PIECES_COUNT_WEIGHT_ = -7
+_PLAYER_PIECES_COUNT_WEIGHT_ = 1000
+_OPPONENT_PIECES_COUNT_WEIGHT_ = -400
 
-_PLAYER_STACKS_WEIGHT_ = 3
-_OPPONENT_STACKS_WEIGHT_ = -3
+_PLAYER_STACKS_WEIGHT_ = 10
+_OPPONENT_STACKS_WEIGHT_ = -5
 
-_PLAYER_MAX_HEIGHT_WEIGHT_ = 1
-_OPPONENT_MAX_HEIGHT_WEIGHT_ = -0.5
+_PLAYER_MAX_HEIGHT_WEIGHT_ = 10
+_OPPONENT_MAX_HEIGHT_WEIGHT_ = -5
 
-_PLAYER_CLUSTER_COUNT_WEIGHT_ = 8
-_OPPONENT_CLUSTER_COUNT_WEIGHT_ = -6
+_PLAYER_CLUSTER_COUNT_WEIGHT_ = -10
+_OPPONENT_CLUSTER_COUNT_WEIGHT_ = 5
 
-_PLAYER_CLUSTER_SIZE_WEIGHT_ = -5
-_OPPONENT_CLUSTER_SIZE_WEIGHT_ = 3
+_PLAYER_CLUSTER_SIZE_WEIGHT_ = -10
+_OPPONENT_CLUSTER_SIZE_WEIGHT_ = 5
 
-_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ = -20
-_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 15
+_PLAYER_CLUSTER_DANGER_SIZE_WEIGHT_ = -10
+_OPPONENT_CLUSTER_DANGER_SIZE_WEIGHT_ = 5
 
 # ============================================================================ #
 # EVALUATE FUNCTION #
@@ -69,18 +69,22 @@ def evaluate(player):
         return 10000000
 
     value = 0
-    value += _PLAYER_PIECES_COUNT_WEIGHT_ * player_pieces 
+    value += _PLAYER_PIECES_COUNT_WEIGHT_ * player_pieces
     value += _OPPONENT_PIECES_COUNT_WEIGHT_ * opponent_pieces
 
-    value += _PLAYER_STACKS_WEIGHT_ * stacks_score(pieces)
-    value +=_OPPONENT_STACKS_WEIGHT_ * stacks_score(opponent)
+    # value -= find_min_distance(pieces, opponent)
 
+    # value += boom_score(player) * 5
+
+    value += _PLAYER_STACKS_WEIGHT_ * stacks_score(pieces)
+    value += _OPPONENT_STACKS_WEIGHT_ * stacks_score(opponent)
+    
     value += _PLAYER_MAX_HEIGHT_WEIGHT_ * max(pieces.values())
     value += _OPPONENT_MAX_HEIGHT_WEIGHT_ * max(opponent.values())
 
     value += clustering_score(pieces, True)
     value += clustering_score(opponent, False)
-
+    
     value += danger_clustering_score(pieces, opponent)
 
     return value
@@ -322,6 +326,41 @@ def clustering_score(pieces, player):
         value += _OPPONENT_CLUSTER_SIZE_WEIGHT_ * clusters_size_average
 
     return value
+
+# ---------------------------------------------------------------------------- #
+# BOOM_SCORE FUNCTION #
+# ------------------- #
+#
+# Helper function – not used anymore
+
+def boom_score(player):
+    pieces = player.pieces
+    ans = 0
+    for piece in pieces.keys():
+        temp = copy.deepcopy(player)
+        boom(temp, piece)
+        resultant = sum(temp.pieces.values()) - sum(temp.opponent.values())
+        original = sum(pieces.values()) - sum(player.opponent.values())
+        ans += (resultant - original)
+
+    return ans
+
+# ---------------------------------------------------------------------------- #
+# FIND_MIN_DISTANCE FUNCTION #
+# -------------------------- #
+#
+# Helper function – not used anymore
+
+def find_min_distance(pieces, opponent):
+    ans = 0
+    for f_piece in pieces.keys():
+        x1, y1 = f_piece
+        for e_piece in opponent.keys():
+            x2, y2 = e_piece
+            dist = abs(x2-x1) + abs(y2-y1)
+            ans += dist
+
+    return ans
 
 # ============================================================================ #
 

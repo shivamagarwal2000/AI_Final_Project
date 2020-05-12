@@ -41,7 +41,7 @@ class MinimaxAgent:
 
         list_actions = valid_moves(player.pieces, player.opponent)
 
-        if self.move_no < 10:
+        if self.move_no < 5:
             remove_booms(list_actions)
 
         length = len(list_actions)
