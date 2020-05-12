@@ -20,16 +20,10 @@ import random
 # ------------------ #
 #
 # MinimaxAgent facade that runs the minimax algorithm.
+# 
+# It takes teh max depth of the tree which is how far the minimax algorithm will look ahead when determining the best action and the move number as input.
 
 class MinimaxAgent:
-
-    # __INIT__ FUNCTION #
-    # ----------------- #
-    #
-    # MinimaxAgent constructor that defines how far ahead the minimax algorithm 
-    # will look when determining the best action.
-    #
-    # It takes max depth of the tree as input.
 
     def __init__(self, max_depth, move_no):
         self.max_depth = max_depth
